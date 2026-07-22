@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verbly — Learn Languages Through Verbs</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">V</div>
+        <div>
+          <h1>Verbly</h1>
+          <p>Learn by doing</p>
+        </div>
+      </div>
+
+      <nav>
+        <button class="nav-item active" data-view="learn">🏠 Learn</button>
+        <button class="nav-item" data-view="practice">⚡ Practice</button>
+        <button class="nav-item" data-view="verbs">📚 Verb Bank</button>
+        <button class="nav-item" data-view="progress">📈 Progress</button>
+      </nav>
+
+      <div class="sidebar-card">
+        <strong>Today’s goal</strong>
+        <div class="progress-bar"><span id="dailyProgress"></span></div>
+        <small><span id="todayXp">0</span> / 50 XP</small>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">Mandarin Chinese • Beginner</span>
+          <h2 id="pageTitle">Verb Path</h2>
+        </div>
+        <div class="stats">
+          <span>🔥 <b id="streak">3</b></span>
+          <span>💎 <b id="gems">120</b></span>
+          <span>⭐ <b id="xp">0</b> XP</span>
+        </div>
+      </header>
+
+      <section id="learnView" class="view active">
+        <div class="hero">
+          <div>
+            <span class="pill">Verb-first curriculum</span>
+            <h3>Speak sooner by mastering actions.</h3>
+            <p>Learn high-frequency verbs, word order, aspect markers, complements, and real-life sentence patterns before memorizing long noun lists.</p>
+            <button id="startLessonBtn" class="primary">Start next lesson</button>
+          </div>
+          <div class="hero-card">
+            <span>Current focus</span>
+            <strong>Core Mandarin verb patterns</strong>
+            <p>是 shì • 有 yǒu • 去 qù • 来 lái • 做 zuò</p>
+          </div>
+        </div>
+
+        <div class="path">
+          <div class="unit">
+            <div class="unit-heading">
+              <div>
+                <span class="eyebrow">Unit 1</span>
+                <h3>Core actions</h3>
+              </div>
+              <span class="unit-score">4 / 6 complete</span>
+            </div>
+            <div class="lesson-grid">
+              <button class="lesson completed" data-lesson="shi">
+                <span>✓</span><strong>是</strong><small>shì • to be</small>
+              </button>
+              <button class="lesson completed" data-lesson="you">
+                <span>✓</span><strong>有</strong><small>yǒu • to have</small>
+              </button>
+              <button class="lesson completed" data-lesson="qu">
+                <span>✓</span><strong>去</strong><small>qù • to go</small>
+              </button>
+              <button class="lesson completed" data-lesson="lai">
+                <span>✓</span><strong>来</strong><small>lái • to come</small>
+              </button>
+              <button class="lesson current" data-lesson="zuo">
+                <span>▶</span><strong>做</strong><small>zuò • to do / make</small>
+              </button>
+              <button class="lesson locked" disabled>
+                <span>🔒</span><strong>能</strong><small>néng • can</small>
+              </button>
+            </div>
+          </div>
+
+          <div class="unit muted">
+            <div class="unit-heading">
+              <div>
+                <span class="eyebrow">Unit 2</span>
+                <h3>Daily routines</h3>
+              </div>
+              <span class="unit-score">Locked</span>
+            </div>
+            <div class="lesson-grid">
+              <button class="lesson locked" disabled><span>🔒</span><strong>吃</strong><small>chī • to eat</small></button>
+              <button class="lesson locked" disabled><span>🔒</span><strong>喝</strong><small>hē • to drink</small></button>
+              <button class="lesson locked" disabled><span>🔒</span><strong>睡</strong><small>shuì • to sleep</small></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="practiceView" class="view">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Adaptive review</span>
+            <h3>Practice weak verb patterns</h3>
+          </div>
+          <button id="quickPracticeBtn" class="primary">Start 5-question drill</button>
+        </div>
+        <div class="practice-cards">
+          <article><span class="icon">🧠</span><h4>Verb recall</h4><p>Recall the correct verb and sentence pattern.</p></article>
+          <article><span class="icon">🧩</span><h4>Sentence builder</h4><p>Arrange Chinese words around a target verb.</p></article>
+          <article><span class="icon">🎧</span><h4>Listening</h4><p>Recognize verbs and aspect markers in speech.</p></article>
+        </div>
+      </section>
+
+      <section id="verbsView" class="view">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Reference</span>
+            <h3>Verb Bank</h3>
+          </div>
+          <input id="verbSearch" type="search" placeholder="Search Hanzi, pinyin, or meaning…" />
+        </div>
+        <div id="verbTable" class="verb-table"></div>
+      </section>
+
+      <section id="progressView" class="view">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Performance</span>
+            <h3>Your progress</h3>
+          </div>
+        </div>
+        <div class="progress-grid">
+          <article><small>Total XP</small><strong id="progressXp">0</strong></article>
+          <article><small>Verbs mastered</small><strong id="masteredCount">4</strong></article>
+          <article><small>Best streak</small><strong>7 days</strong></article>
+          <article><small>Accuracy</small><strong id="accuracy">—</strong></article>
+        </div>
+        <div class="mastery-panel">
+          <h4>Verb mastery</h4>
+          <div id="masteryList"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="lessonModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="lesson-top">
+        <button id="closeLesson" class="icon-btn">✕</button>
+        <div class="lesson-progress"><span id="lessonProgressBar"></span></div>
+        <span id="questionCount">1 / 5</span>
+      </div>
+      <div id="questionArea"></div>
+      <div id="feedback" class="feedback hidden"></div>
+      <button id="checkAnswer" class="primary wide">Check</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
