@@ -1,38 +1,39 @@
-# Verbly Chinese
+# Verbly Mandarin — Functional MVP
 
-Verbly Chinese is a static browser prototype for a Mandarin verb-first language-learning app.
+A dependency-free progressive web application for learning Mandarin through high-frequency verbs.
 
-## Run
+## Run locally
 
-Open `index.html` in a modern browser, or run:
+Because the app includes a service worker, serve it over HTTP rather than opening the file directly:
 
 ```bash
+cd verbly_mandarin_mvp
 python3 -m http.server 8000
 ```
 
-Then visit `http://localhost:8000`.
+Open `http://localhost:8000`.
 
-## Mandarin learning model
+## Progression
 
-Mandarin verbs do not conjugate for person or number. The prototype therefore focuses on:
+- Each lesson contains five questions.
+- A score of 80% or higher passes the lesson.
+- Passing a lesson unlocks the next lesson.
+- Passing all five lessons in a unit unlocks the next unit.
+- Failed questions enter the review queue.
+- Progress, XP, settings, streaks, and scores persist in browser local storage.
 
-- High-frequency verbs in Hanzi and pinyin
-- Subject–verb–object word order
-- Modal verbs such as 能 and 想
-- Sentence-level translation and recognition
-- A foundation for later aspect markers such as 了, 过, and 着
-- Verb complements and practical usage patterns
+## Included features
 
-## Included
+- Four units and twenty high-frequency Mandarin verbs
+- Pinyin input using a regular alphabet keyboard
+- Optional tone-free answer matching
+- Browser speech synthesis for Chinese prompts
+- Adaptive review queue for missed questions
+- XP, streaks, lesson scores, mastery, and daily goals
+- Searchable verb bank
+- Installable/offline-capable PWA shell
+- Responsive mobile and desktop interface
 
-- Mandarin verb-focused learning path
-- Hanzi and pinyin support
-- Translation and sentence-completion drills
-- XP, daily goal, accuracy, and local progress persistence
-- Searchable Mandarin verb bank
-- Responsive desktop/mobile layout
+## Production limitations
 
-
-## Pinyin keyboard input
-
-Typed lesson questions accept pinyin entered with a regular alphabet keyboard. Tone marks are optional, capitalization is ignored, and spaces or common punctuation do not affect answer checking. For example, `shi`, `shì`, and `Shi` are treated as equivalent.
+This is a complete client-side MVP, not a hosted multi-user service. A production deployment would still need authentication, a backend database, cloud content management, analytics, tested native-speaker audio, speech scoring, security hardening, automated tests, accessibility review, and app-store packaging.

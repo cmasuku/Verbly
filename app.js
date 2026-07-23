@@ -1,161 +1,73 @@
-const verbs = [
-  {verb:"是", pinyin:"shì", meaning:"to be", example:"我是学生。 Wǒ shì xuésheng.", mastery:100},
-  {verb:"有", pinyin:"yǒu", meaning:"to have", example:"我有一个问题。 Wǒ yǒu yí ge wèntí.", mastery:92},
-  {verb:"去", pinyin:"qù", meaning:"to go", example:"我们去上班。 Wǒmen qù shàngbān.", mastery:86},
-  {verb:"来", pinyin:"lái", meaning:"to come", example:"他明天来。 Tā míngtiān lái.", mastery:81},
-  {verb:"做", pinyin:"zuò", meaning:"to do / make", example:"我做运动。 Wǒ zuò yùndòng.", mastery:45},
-  {verb:"能", pinyin:"néng", meaning:"can / be able to", example:"我能帮你。 Wǒ néng bāng nǐ.", mastery:18},
-  {verb:"想", pinyin:"xiǎng", meaning:"to want / think", example:"我想学中文。 Wǒ xiǎng xué Zhōngwén.", mastery:10},
-  {verb:"说", pinyin:"shuō", meaning:"to speak / say", example:"她说中文。 Tā shuō Zhōngwén.", mastery:5}
+const CURRICULUM = [
+  {id:'u1',title:'Essential actions',description:'Identity, possession, movement, and doing.',verbs:[
+    {id:'shi',hanzi:'是',pinyin:'shì',plain:'shi',meaning:'to be',pattern:'我是学生。',patternPinyin:'Wǒ shì xuésheng.',translation:'I am a student.'},
+    {id:'you',hanzi:'有',pinyin:'yǒu',plain:'you',meaning:'to have',pattern:'我有时间。',patternPinyin:'Wǒ yǒu shíjiān.',translation:'I have time.'},
+    {id:'qu',hanzi:'去',pinyin:'qù',plain:'qu',meaning:'to go',pattern:'我们去学校。',patternPinyin:'Wǒmen qù xuéxiào.',translation:'We go to school.'},
+    {id:'lai',hanzi:'来',pinyin:'lái',plain:'lai',meaning:'to come',pattern:'他明天来。',patternPinyin:'Tā míngtiān lái.',translation:'He comes tomorrow.'},
+    {id:'zuo',hanzi:'做',pinyin:'zuò',plain:'zuo',meaning:'to do / make',pattern:'我做作业。',patternPinyin:'Wǒ zuò zuòyè.',translation:'I do homework.'}
+  ]},
+  {id:'u2',title:'Ability and intention',description:'Wanting, knowing how, and communicating.',verbs:[
+    {id:'xiang',hanzi:'想',pinyin:'xiǎng',plain:'xiang',meaning:'to want / think',pattern:'我想学中文。',patternPinyin:'Wǒ xiǎng xué Zhōngwén.',translation:'I want to learn Chinese.'},
+    {id:'neng',hanzi:'能',pinyin:'néng',plain:'neng',meaning:'can / be able',pattern:'你能来吗？',patternPinyin:'Nǐ néng lái ma?',translation:'Can you come?'},
+    {id:'hui',hanzi:'会',pinyin:'huì',plain:'hui',meaning:'know how to',pattern:'她会说中文。',patternPinyin:'Tā huì shuō Zhōngwén.',translation:'She can speak Chinese.'},
+    {id:'shuo',hanzi:'说',pinyin:'shuō',plain:'shuo',meaning:'to speak / say',pattern:'请慢慢说。',patternPinyin:'Qǐng mànmàn shuō.',translation:'Please speak slowly.'},
+    {id:'ting',hanzi:'听',pinyin:'tīng',plain:'ting',meaning:'to listen',pattern:'我听音乐。',patternPinyin:'Wǒ tīng yīnyuè.',translation:'I listen to music.'}
+  ]},
+  {id:'u3',title:'Daily life',description:'Eating, drinking, sleeping, reading, and watching.',verbs:[
+    {id:'chi',hanzi:'吃',pinyin:'chī',plain:'chi',meaning:'to eat',pattern:'我们吃饭。',patternPinyin:'Wǒmen chīfàn.',translation:'We eat.'},
+    {id:'he',hanzi:'喝',pinyin:'hē',plain:'he',meaning:'to drink',pattern:'我喝茶。',patternPinyin:'Wǒ hē chá.',translation:'I drink tea.'},
+    {id:'shui',hanzi:'睡',pinyin:'shuì',plain:'shui',meaning:'to sleep',pattern:'孩子睡觉。',patternPinyin:'Háizi shuìjiào.',translation:'The child sleeps.'},
+    {id:'kan',hanzi:'看',pinyin:'kàn',plain:'kan',meaning:'to see / watch / read',pattern:'他看书。',patternPinyin:'Tā kàn shū.',translation:'He reads a book.'},
+    {id:'xue',hanzi:'学',pinyin:'xué',plain:'xue',meaning:'to study / learn',pattern:'我学汉语。',patternPinyin:'Wǒ xué Hànyǔ.',translation:'I study Chinese.'}
+  ]},
+  {id:'u4',title:'Interaction',description:'Giving, taking, buying, asking, and helping.',verbs:[
+    {id:'gei',hanzi:'给',pinyin:'gěi',plain:'gei',meaning:'to give',pattern:'我给你一本书。',patternPinyin:'Wǒ gěi nǐ yì běn shū.',translation:'I give you a book.'},
+    {id:'na',hanzi:'拿',pinyin:'ná',plain:'na',meaning:'to take / hold',pattern:'请拿这个。',patternPinyin:'Qǐng ná zhège.',translation:'Please take this.'},
+    {id:'mai',hanzi:'买',pinyin:'mǎi',plain:'mai',meaning:'to buy',pattern:'她买水果。',patternPinyin:'Tā mǎi shuǐguǒ.',translation:'She buys fruit.'},
+    {id:'wen',hanzi:'问',pinyin:'wèn',plain:'wen',meaning:'to ask',pattern:'我想问一个问题。',patternPinyin:'Wǒ xiǎng wèn yí ge wèntí.',translation:'I want to ask a question.'},
+    {id:'bang',hanzi:'帮',pinyin:'bāng',plain:'bang',meaning:'to help',pattern:'你能帮我吗？',patternPinyin:'Nǐ néng bāng wǒ ma?',translation:'Can you help me?'}
+  ]}
 ];
-
-const questionSets = {
-  zuo: [
-    {type:"mc", prompt:"Choose the correct verb", detail:"我每天早上___运动。 Wǒ měitiān zǎoshang ___ yùndòng.", options:["做 zuò","去 qù","说 shuō"], answer:"做 zuò"},
-    {type:"type", prompt:"Translate using 做", detail:"We do the work. Type your answer in pinyin.", answers:["women zuo gongzuo","wǒmen zuò gōngzuò","women zuo zhege gongzuo","wǒmen zuò zhège gōngzuò"], displayAnswer:"wǒmen zuò gōngzuò"},
-    {type:"mc", prompt:"Choose the best sentence", detail:"She makes dinner.", options:["她做晚饭。","她去晚饭。","她有晚饭。"], answer:"她做晚饭。"},
-    {type:"mc", prompt:"What does 做 mean?", detail:"Select the closest meaning.", options:["to do / make","to go","to speak"], answer:"to do / make"},
-    {type:"type", prompt:"Complete the sentence", detail:"你___什么？ Nǐ ___ shénme? — What are you doing? Type the missing verb in pinyin.", answers:["zuo","zuò"], displayAnswer:"zuò"}
-  ],
-  practice: [
-    {type:"mc", prompt:"Choose the correct verb", detail:"我们___市场。 Wǒmen ___ shìchǎng. — We go to the market.", options:["去 qù","有 yǒu","说 shuō"], answer:"去 qù"},
-    {type:"type", prompt:"Complete the sentence", detail:"我___一个问题。 Wǒ ___ yí ge wèntí. — I have a question. Type the missing verb in pinyin.", answers:["you","yǒu"], displayAnswer:"yǒu"},
-    {type:"mc", prompt:"Choose the best translation", detail:"I am a student.", options:["我是学生。","我有学生。","我去学生。"], answer:"我是学生。"},
-    {type:"type", prompt:"Translate", detail:"She wants to learn Chinese. Type your answer in pinyin.", answers:["ta xiang xue zhongwen","tā xiǎng xué zhōngwén","ta xiang xuexi zhongwen","tā xiǎng xuéxí zhōngwén"], displayAnswer:"tā xiǎng xué Zhōngwén"},
-    {type:"mc", prompt:"Select the target verb", detail:"我能帮你。 Wǒ néng bāng nǐ.", options:["能 néng","说 shuō","做 zuò"], answer:"能 néng"}
-  ]
-};
-
-let state = JSON.parse(localStorage.getItem("verblyChineseState") || '{"xp":0,"todayXp":0,"correct":0,"answered":0}');
-let lesson = {questions:[], index:0, selected:null, complete:false};
-
-const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
-
-function save(){ localStorage.setItem("verblyChineseState", JSON.stringify(state)); updateStats(); }
-
-function updateStats(){
-  $("#xp").textContent = state.xp;
-  $("#progressXp").textContent = state.xp;
-  $("#todayXp").textContent = state.todayXp;
-  $("#dailyProgress").style.width = `${Math.min(100, state.todayXp/50*100)}%`;
-  $("#accuracy").textContent = state.answered ? `${Math.round(state.correct/state.answered*100)}%` : "—";
-}
-
-function switchView(name){
-  $$(".view").forEach(v => v.classList.remove("active"));
-  $(`#${name}View`).classList.add("active");
-  $$(".nav-item").forEach(n => n.classList.toggle("active", n.dataset.view === name));
-  const titles = {learn:"Verb Path",practice:"Practice",verbs:"Verb Bank",progress:"Progress"};
-  $("#pageTitle").textContent = titles[name];
-}
-
-$$(".nav-item").forEach(btn => btn.addEventListener("click", () => switchView(btn.dataset.view)));
-
-function renderVerbTable(filter=""){
-  const f = filter.toLowerCase();
-  const rows = verbs.filter(v => `${v.verb} ${v.pinyin} ${v.meaning}`.toLowerCase().includes(f));
-  $("#verbTable").innerHTML = `
-    <div class="verb-row header"><span>Verb</span><span>Pinyin / meaning</span><span>Example</span><span>Mastery</span></div>
-    ${rows.map(v => `<div class="verb-row"><strong class="hanzi">${v.verb}</strong><span>${v.pinyin}<br><small>${v.meaning}</small></span><span>${v.example}</span><span class="badge">${v.mastery}%</span></div>`).join("")}
-  `;
-}
-$("#verbSearch").addEventListener("input", e => renderVerbTable(e.target.value));
-
-function renderMastery(){
-  $("#masteryList").innerHTML = verbs.slice(0,6).map(v => `
-    <div class="mastery-item">
-      <strong class="hanzi">${v.verb} <small>${v.pinyin}</small></strong>
-      <div class="mastery-track"><span style="width:${v.mastery}%"></span></div>
-      <span>${v.mastery}%</span>
-    </div>
-  `).join("");
-}
-
-function startLesson(kind="zuo"){
-  lesson.questions = questionSets[kind] || questionSets.zuo;
-  lesson.index = 0;
-  lesson.selected = null;
-  lesson.complete = false;
-  $("#lessonModal").classList.remove("hidden");
-  renderQuestion();
-}
-
-function normalize(s){
-  return s
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[üǖǘǚǜ]/g, "v")
-    .replace(/[’']/g, "")
-    .replace(/[？?！!。.,，:：;；-]/g, "")
-    .replace(/\s+/g, "");
-}
-function isCorrect(q, value){
-  const accepted = q.answers || [q.answer];
-  return accepted.some(answer => normalize(value) === normalize(answer));
-}
-
-function renderQuestion(){
-  const q = lesson.questions[lesson.index];
-  $("#feedback").className = "feedback hidden";
-  $("#feedback").textContent = "";
-  $("#checkAnswer").textContent = "Check";
-  lesson.selected = null;
-  $("#questionCount").textContent = `${lesson.index+1} / ${lesson.questions.length}`;
-  $("#lessonProgressBar").style.width = `${lesson.index/lesson.questions.length*100}%`;
-  let input = "";
-  if(q.type === "mc"){
-    input = `<div class="options">${q.options.map(o => `<button class="option" data-value="${o}">${o}</button>`).join("")}</div>`;
-  } else {
-    input = `<input class="answer-input" id="typedAnswer" placeholder="Type pinyin with regular letters" autocomplete="off" />`;
-  }
-  $("#questionArea").innerHTML = `<span class="eyebrow">Mandarin verb challenge</span><h3>${q.prompt}</h3><p>${q.detail}</p>${input}`;
-  $$(".option").forEach(o => o.addEventListener("click", () => {
-    $$(".option").forEach(x => x.classList.remove("selected"));
-    o.classList.add("selected");
-    lesson.selected = o.dataset.value;
-  }));
-}
-
-$("#checkAnswer").addEventListener("click", () => {
-  if(lesson.complete){ $("#lessonModal").classList.add("hidden"); return; }
-  const q = lesson.questions[lesson.index];
-  const feedback = $("#feedback");
-
-  if($("#checkAnswer").textContent === "Continue"){
-    lesson.index++;
-    if(lesson.index >= lesson.questions.length){
-      lesson.complete = true;
-      $("#lessonProgressBar").style.width = "100%";
-      $("#questionArea").innerHTML = `<span class="eyebrow">Lesson complete</span><h3>太好了！ Tài hǎo le!</h3><p>You practiced Mandarin verbs through word order, context, and sentence patterns.</p><div class="hero-card"><strong>Up to +50 XP</strong><p>Continue tomorrow to strengthen recall.</p></div>`;
-      $("#feedback").className = "feedback correct";
-      $("#feedback").textContent = "Lesson completed.";
-      $("#checkAnswer").textContent = "Finish";
-      return;
-    }
-    renderQuestion();
-    return;
-  }
-
-  const value = q.type === "mc" ? lesson.selected : ($("#typedAnswer")?.value || "");
-  if(!value) return;
-  const correct = isCorrect(q, value);
-  state.answered++;
-  if(correct){ state.correct++; state.xp += 10; state.todayXp += 10; }
-  save();
-
-  feedback.className = `feedback ${correct ? "correct" : "wrong"}`;
-  feedback.textContent = correct ? "Correct! +10 XP" : `Not quite. Correct answer: ${q.displayAnswer || q.answer}`;
-  $("#checkAnswer").textContent = "Continue";
-});
-
-$("#closeLesson").addEventListener("click", () => $("#lessonModal").classList.add("hidden"));
-$("#startLessonBtn").addEventListener("click", () => startLesson("zuo"));
-$("#quickPracticeBtn").addEventListener("click", () => startLesson("practice"));
-$$(".lesson[data-lesson]").forEach(l => l.addEventListener("click", () => startLesson(l.dataset.lesson === "zuo" ? "zuo" : "practice")));
-
-renderVerbTable();
-renderMastery();
-updateStats();
+const ALL_VERBS = CURRICULUM.flatMap((u,ui)=>u.verbs.map((v,vi)=>({...v,unitIndex:ui,lessonIndex:vi,unitId:u.id})));
+const STORE_KEY='verblyMandarinMvpV1';
+const today=()=>new Date().toISOString().slice(0,10);
+const defaultState=()=>({xp:0,todayXp:0,lastActiveDate:null,streak:0,bestStreak:0,answered:0,correct:0,lessonScores:{},reviewQueue:[],settings:{dailyGoal:50,showPinyin:true,acceptToneFree:true,autoAudio:false}});
+let state=loadState();
+let session=null;
+const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
+function loadState(){try{return {...defaultState(),...JSON.parse(localStorage.getItem(STORE_KEY)||'{}'),settings:{...defaultState().settings,...(JSON.parse(localStorage.getItem(STORE_KEY)||'{}').settings||{})}}}catch{return defaultState()}}
+function saveState(){localStorage.setItem(STORE_KEY,JSON.stringify(state));renderAll()}
+function normalize(text,stripTones=true){let s=(text||'').toLowerCase().trim().replace(/[¿?¡!。，、,.]/g,'').replace(/\s+/g,' ');if(stripTones)s=s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ü/g,'u');return s}
+function passed(id){return (state.lessonScores[id]?.best||0)>=80}
+function unitUnlocked(index){return index===0||CURRICULUM[index-1].verbs.every(v=>passed(v.id))}
+function unitComplete(index){return CURRICULUM[index].verbs.every(v=>passed(v.id))}
+function lessonUnlocked(ui,li){if(!unitUnlocked(ui))return false;return li===0||passed(CURRICULUM[ui].verbs[li-1].id)}
+function nextLesson(){for(let ui=0;ui<CURRICULUM.length;ui++){if(!unitUnlocked(ui))break;for(let li=0;li<CURRICULUM[ui].verbs.length;li++){if(lessonUnlocked(ui,li)&&!passed(CURRICULUM[ui].verbs[li].id))return {ui,li,verb:CURRICULUM[ui].verbs[li]}}}return null}
+function updateActivity(){const d=today();if(state.lastActiveDate===d)return;const prev=new Date(d);prev.setDate(prev.getDate()-1);const prevKey=prev.toISOString().slice(0,10);state.streak=state.lastActiveDate===prevKey?state.streak+1:1;state.bestStreak=Math.max(state.bestStreak,state.streak);state.lastActiveDate=d;state.todayXp=0}
+function awardXp(n){updateActivity();state.xp+=n;state.todayXp+=n}
+function speak(text){if(!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='zh-CN';u.rate=.8;window.speechSynthesis.speak(u)}
+function showToast(msg){const el=$('#toast');el.textContent=msg;el.classList.remove('hidden');setTimeout(()=>el.classList.add('hidden'),2500)}
+function renderAll(){renderStats();renderPath();renderVerbBank($('#verbSearch')?.value||'');renderProgress();renderReview();renderSettings()}
+function renderStats(){const mastered=ALL_VERBS.filter(v=>passed(v.id)).length;$('#xpStat').textContent=state.xp;$('#masteredStat').textContent=mastered;$('#streakStat').textContent=state.streak;$('#dailyGoalText').textContent=`${state.todayXp} / ${state.settings.dailyGoal} XP`;const pct=Math.min(100,state.todayXp/state.settings.dailyGoal*100);$('#dailyGoalBar').style.width=`${pct}%`;$('#dailyGoalMessage').textContent=pct>=100?'Daily goal complete!':'Keep going — every correct answer earns XP.';$('#reviewBadge').textContent=state.reviewQueue.length;$('#reviewBadge').classList.toggle('hidden',!state.reviewQueue.length);const next=nextLesson();$('#nextLessonName').textContent=next?`${next.verb.hanzi} ${next.verb.pinyin} — ${next.verb.meaning}`:'All current units complete';$('#nextLessonMeta').textContent=next?`Unit ${next.ui+1}, Lesson ${next.li+1}`:'Review mastered verbs or reset progress.'}
+function renderPath(){const next=nextLesson();$('#unitPath').innerHTML=CURRICULUM.map((u,ui)=>{const unlocked=unitUnlocked(ui),complete=unitComplete(ui),done=u.verbs.filter(v=>passed(v.id)).length;return `<article class="unit-card ${unlocked?'':'locked'}"><div class="unit-head"><div><span class="eyebrow">Unit ${ui+1}</span><h3>${unlocked?'':'🔒 '}${u.title}</h3><p>${u.description}</p></div><span class="unit-status">${complete?'Complete':unlocked?`${done} / ${u.verbs.length} passed`:'Complete Unit '+ui+' to unlock'}</span></div><div class="lesson-grid">${u.verbs.map((v,li)=>{const open=lessonUnlocked(ui,li),score=state.lessonScores[v.id]?.best||0,isNext=next&&next.verb.id===v.id;return `<button class="lesson-node ${passed(v.id)?'passed':isNext?'current':open?'':'locked'}" data-verb="${v.id}" ${open?'':'disabled'}><span>${passed(v.id)?'✓':open?'▶':'🔒'}</span><span class="hanzi">${v.hanzi}</span><span class="pinyin">${v.pinyin}</span><small>${v.meaning}</small>${score?`<span class="lesson-score">Best ${score}%</span>`:''}</button>`}).join('')}</div></article>`}).join('');$$('.lesson-node[data-verb]').forEach(b=>b.addEventListener('click',()=>startLesson(b.dataset.verb)))}
+function renderVerbBank(query=''){const q=normalize(query);const rows=ALL_VERBS.filter(v=>normalize(`${v.hanzi} ${v.pinyin} ${v.plain} ${v.meaning}`).includes(q));$('#verbTable').innerHTML=`<div class="verb-row header"><span>Verb</span><span>Pinyin</span><span>Meaning</span><span>Example</span><span>Mastery</span></div>${rows.map(v=>`<div class="verb-row"><span class="verb-hanzi">${v.hanzi} <button class="audio-btn" data-speak="${v.hanzi}" aria-label="Play ${v.hanzi}">🔊</button></span><strong>${v.pinyin}</strong><span>${v.meaning}</span><span>${v.pattern}<br><small>${v.patternPinyin}</small></span><span class="mastery-chip">${state.lessonScores[v.id]?.best||0}%</span></div>`).join('')}`;$$('[data-speak]').forEach(b=>b.addEventListener('click',()=>speak(b.dataset.speak)))}
+function renderProgress(){const passedCount=ALL_VERBS.filter(v=>passed(v.id)).length;$('#totalXpCard').textContent=state.xp;$('#passedCard').textContent=`${passedCount} / ${ALL_VERBS.length}`;$('#accuracyCard').textContent=state.answered?`${Math.round(state.correct/state.answered*100)}%`:'—';$('#streakCard').textContent=`${state.streak} day${state.streak===1?'':'s'}`;$('#unitProgress').innerHTML=CURRICULUM.map((u,i)=>{const done=u.verbs.filter(v=>passed(v.id)).length,pct=done/u.verbs.length*100;return `<div class="progress-item"><strong>Unit ${i+1}</strong><div class="meter"><span style="width:${pct}%"></span></div><span>${Math.round(pct)}%</span></div>`}).join('');$('#masteryList').innerHTML=ALL_VERBS.map(v=>{const score=state.lessonScores[v.id]?.best||0;return `<div class="mastery-item"><strong>${v.hanzi} ${v.pinyin}</strong><div class="meter"><span style="width:${score}%"></span></div><span>${score}%</span></div>`}).join('')}
+function renderReview(){const due=state.reviewQueue.length;$('#reviewSummary').innerHTML=due?`<h4>${due} item${due===1?'':'s'} ready</h4><p>These prompts were previously missed. Review them to strengthen recall.</p>`:`<h4>Your review queue is clear</h4><p>Missed questions will appear here automatically.</p>`;$('#startReviewBtn').disabled=!due}
+function renderSettings(){if(!$('#goalSelect'))return;$('#goalSelect').value=String(state.settings.dailyGoal);$('#pinyinToggle').checked=state.settings.showPinyin;$('#tonesToggle').checked=state.settings.acceptToneFree;$('#audioToggle').checked=state.settings.autoAudio}
+function makeQuestions(v){const distractors=ALL_VERBS.filter(x=>x.id!==v.id).sort(()=>Math.random()-.5).slice(0,2);return [
+ {type:'mc',title:'Choose the meaning',hanzi:v.hanzi,pinyin:v.pinyin,prompt:`What does ${v.hanzi} mean?`,options:[v,...distractors].map(x=>x.meaning).sort(()=>Math.random()-.5),answer:v.meaning},
+ {type:'text',title:'Type the pinyin',hanzi:v.hanzi,pinyin:v.pinyin,prompt:'Use regular alphabet letters. Tone marks are optional.',answer:v.pinyin,displayAnswer:v.pinyin},
+ {type:'mc',title:'Choose the verb',prompt:v.translation,subprompt:'Select the verb used in the Chinese sentence.',options:[v,...distractors].map(x=>`${x.hanzi} · ${x.pinyin}`).sort(()=>Math.random()-.5),answer:`${v.hanzi} · ${v.pinyin}`},
+ {type:'text',title:'Complete the sentence',hanzi:v.pattern,pinyin:v.patternPinyin,prompt:`Type only the pinyin for ${v.hanzi}.`,answer:v.pinyin,displayAnswer:v.pinyin},
+ {type:'mc',title:'Match the example',prompt:v.meaning,subprompt:'Which sentence uses this verb?',options:[v,...distractors].map(x=>x.pattern).sort(()=>Math.random()-.5),answer:v.pattern}
+]}
+function startLesson(id){const v=ALL_VERBS.find(x=>x.id===id);if(!v)return;session={mode:'lesson',verb:v,questions:makeQuestions(v),index:0,correct:0,selected:null,answered:false};$('#lessonModal').classList.remove('hidden');renderQuestion()}
+function startReview(){const items=state.reviewQueue.slice(0,10).map(r=>{const v=ALL_VERBS.find(x=>x.id===r.verbId);return makeQuestions(v)[r.questionIndex%5]});if(!items.length)return;session={mode:'review',verb:null,questions:items,index:0,correct:0,selected:null,answered:false};$('#lessonModal').classList.remove('hidden');renderQuestion()}
+function renderQuestion(){const q=session.questions[session.index];session.selected=null;session.answered=false;$('#lessonFeedback').className='feedback hidden';$('#lessonAction').textContent='Check';$('#lessonCounter').textContent=`${session.index+1} / ${session.questions.length}`;$('#lessonBar').style.width=`${session.index/session.questions.length*100}%`;const pinyin=q.pinyin&&state.settings.showPinyin?`<div class="prompt-pinyin">${q.pinyin}</div>`:'';const content=q.type==='mc'?`<div class="options">${q.options.map(o=>`<button class="option" data-value="${o}">${o}</button>`).join('')}</div>`:`<input id="textAnswer" class="text-answer" autocomplete="off" placeholder="Type with regular alphabet letters" />`;$('#lessonBody').innerHTML=`<div class="question"><span class="eyebrow">${session.mode==='review'?'Review':'Lesson'}</span><h3 id="lessonTitle">${q.title}</h3>${q.hanzi?`<div class="prompt-hanzi">${q.hanzi} <button class="audio-btn" id="promptAudio">🔊</button></div>`:''}${pinyin}<p>${q.prompt||''}</p>${q.subprompt?`<p>${q.subprompt}</p>`:''}${content}</div>`;if(q.hanzi){$('#promptAudio').addEventListener('click',()=>speak(q.hanzi));if(state.settings.autoAudio)speak(q.hanzi)}$$('.option').forEach(o=>o.addEventListener('click',()=>{$$('.option').forEach(x=>x.classList.remove('selected'));o.classList.add('selected');session.selected=o.dataset.value}));$('#textAnswer')?.focus()}
+function checkAnswer(){const q=session.questions[session.index];if(session.answered){session.index++;if(session.index>=session.questions.length)return finishSession();renderQuestion();return}const raw=q.type==='mc'?session.selected:($('#textAnswer')?.value||'');if(!raw)return;const strip=state.settings.acceptToneFree;const ok=normalize(raw,strip)===normalize(q.answer,strip);session.answered=true;state.answered++;if(ok){session.correct++;state.correct++;awardXp(10)}else if(session.mode==='lesson'){const qi=session.index;const existing=state.reviewQueue.some(r=>r.verbId===session.verb.id&&r.questionIndex===qi);if(!existing)state.reviewQueue.push({verbId:session.verb.id,questionIndex:qi})}else{state.reviewQueue.shift()}const f=$('#lessonFeedback');f.className=`feedback ${ok?'good':'bad'}`;f.textContent=ok?'Correct! +10 XP':`Correct answer: ${q.displayAnswer||q.answer}`;$('#lessonAction').textContent='Continue';localStorage.setItem(STORE_KEY,JSON.stringify(state));renderStats()}
+function finishSession(){const score=Math.round(session.correct/session.questions.length*100);if(session.mode==='lesson'){const id=session.verb.id,prev=state.lessonScores[id]||{best:0,attempts:0};state.lessonScores[id]={best:Math.max(prev.best,score),attempts:prev.attempts+1,lastScore:score};if(score>=80){awardXp(20);showToast('Lesson passed. Next lesson unlocked!')}else showToast('Score 80% or higher to pass.')}else{if(score>=80)awardXp(10);showToast('Review complete.')}saveState();$('#lessonBar').style.width='100%';$('#lessonFeedback').className='feedback hidden';$('#lessonBody').innerHTML=`<div class="summary-score ${score>=80?'pass':'fail'}"><span class="eyebrow">Session complete</span><strong>${score}%</strong><h3>${score>=80?'Passed':'Try again'}</h3><p>${session.correct} of ${session.questions.length} correct.${score>=80?' You reached the 80% mastery threshold.':' You need at least 80% to unlock the next lesson.'}</p></div>`;$('#lessonAction').textContent='Finish';session.finished=true}
+$('#lessonAction').addEventListener('click',()=>{if(session?.finished){$('#lessonModal').classList.add('hidden');session=null;return}checkAnswer()});$('#closeLesson').addEventListener('click',()=>{$('#lessonModal').classList.add('hidden');session=null});$('#continueBtn').addEventListener('click',()=>{const n=nextLesson();if(n)startLesson(n.verb.id);else switchView('review')});$('#startReviewBtn').addEventListener('click',startReview);$('#verbSearch').addEventListener('input',e=>renderVerbBank(e.target.value));$('#resetProgressBtn').addEventListener('click',()=>{if(confirm('Reset all Verbly progress?')){state=defaultState();saveState();showToast('Progress reset.')}});$('#goalSelect').addEventListener('change',e=>{state.settings.dailyGoal=Number(e.target.value);saveState()});$('#pinyinToggle').addEventListener('change',e=>{state.settings.showPinyin=e.target.checked;saveState()});$('#tonesToggle').addEventListener('change',e=>{state.settings.acceptToneFree=e.target.checked;saveState()});$('#audioToggle').addEventListener('change',e=>{state.settings.autoAudio=e.target.checked;saveState()});
+function switchView(name){$$('.view').forEach(v=>v.classList.remove('active'));$(`#${name}View`).classList.add('active');$$('.nav').forEach(n=>n.classList.toggle('active',n.dataset.view===name));const titles={learn:'Learning Path',review:'Review',verbs:'Verb Bank',progress:'Progress',settings:'Settings'};$('#viewTitle').textContent=titles[name]}
+$$('.nav').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+renderAll();
