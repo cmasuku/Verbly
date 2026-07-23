@@ -1,6 +1,7 @@
 # Verbly Mandarin — Functional MVP
 
 A dependency-free progressive web application for learning Mandarin through high-frequency verbs.
+This is an updated version of the Verbly Mandarin App.
 
 ## Run locally
 
